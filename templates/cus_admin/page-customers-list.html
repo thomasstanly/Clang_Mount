@@ -1,0 +1,102 @@
+{% extends 'cus_admin/base.html' %}
+{% load static %}
+{% block title %}Customer List{% endblock %}
+{% block content %}
+  <main class="main-wrap">
+    {% include 'cus_admin/header.html' %}
+    <section class="content-main">
+      <div class="content-header">
+        <h2 class="content-title">Customers list</h2>
+        {% comment %} <div>
+          <a href="#" class="btn btn-primary"><i class="material-icons md-plus"></i> Create new</a>
+        </div> {% endcomment %}
+      </div>
+      <div class="card mb-4">
+        <header class="card-header">
+          <div class="row">
+            <div class="col-lg-6 col-md-6 me-auto">
+              <form class="d-flex" action="{% url 'customer_app:search' %}" method="GET">
+                {% csrf_token %}
+                <input name="search" class="bg-dark text-light rounded w-100" type="text" placeholder="Search..." class="form-control" />
+                <button type="submit" class="btn btn-secondary ms-2">Search</button>
+              </form>
+            </div>
+          </div>  
+        </header> <!-- card-header end// -->
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>Customer</th>
+                  <th>Email</th>
+                  <th>Status</th>
+                  <th>Registered</th>
+                  <th class="text-end">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for customer in customer_detials %}
+                  <tr>
+                    <td width="40%">
+                      <a href="#" class="itemside">
+                        <div class="info pl-3">
+                          <h6 class="mb-0 title">{{customer.username}}</h6>
+                          <small class="text-muted">Customer ID: {{customer.id}}</small>
+                        </div>
+                      </a>
+                    </td>
+                    <td>
+                      <span>{{customer.email}}</span>
+                    </td>
+                    <td>
+                      <span class="badge rounded-pill alert-danger">{% if customer.is_active %}Active {% else %}Inactive{% endif %}</span>
+                    </td>
+                    <td>08.07.2020</td>
+                    <td class="text-end">
+                      <a href="{% url 'customer_app:customer_edit' id=customer.id %}" class="btn btn-sm btn-brand rounded font-sm mt-15">Edit Status</a>
+                    </td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table> <!-- table-responsive.// -->
+          </div>
+        </div> <!-- card-body end// -->
+      </div> <!-- card end// -->
+      <div class="pagination-area mt-30 mb-50">
+        <nav aria-label="Page navigation example">
+          <ul class="pagination justify-content-start">
+            {% if customer_detials.has_previous %}
+              <li class="page-item">
+                  <a class="page-link" href="?{% if request.GET.search %}search={{request.GET.search}}&{% endif %}page=1">&laquo;</a>
+              </li>
+            {% endif %}
+            {% for page_num in customer_detials.paginator.page_range %}
+              <li class="page-item {% if page_num == customer_detials.number %}active{% endif %}">
+                  <a class="page-link" href="?{% if request.GET.search %}search={{request.GET.search}}&{% endif %}page={{ page_num }}">{{ page_num }}</a>
+              </li>
+            {% endfor %}
+            {% if customer_detials.has_next %}
+              <li class="page-item">
+                  <a class="page-link" href="?{% if request.GET.search %}search={{request.GET.search}}&{% endif %}page={{ customer_detials.paginator.num_pages }}">&raquo;</a>
+              </li>
+            {% endif %}
+          </ul>
+        </nav>
+      </div>
+    </section> <!-- content-main end// -->
+    <footer class="main-footer font-xs">
+      <div class="row pb-30 pt-15">
+        <div class="col-sm-6">
+          <script data-cfasync="false" src="../../../cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+          <script>
+            document.write(new Date().getFullYear())
+          </script>©, Evara - HTML Ecommerce Template .
+        </div>
+        <div class="col-sm-6">
+          <div class="text-sm-end">All rights reserved</div>
+        </div>
+      </div>
+    </footer>
+  </main>
+{% endblock %}

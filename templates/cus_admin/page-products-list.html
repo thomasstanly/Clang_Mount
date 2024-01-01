@@ -1,0 +1,123 @@
+{% extends 'cus_admin/base.html' %}
+{% load static %}
+{% block title %}Product List{% endblock %}
+{% block content %}
+  <main class="main-wrap">
+    {% include 'cus_admin/header.html' %}
+    <section class="content-main">
+      <div class="content-header">
+        <div>
+          <h2 class="content-title card-title">Products List</h2>
+        </div>
+        <div>
+          <a href="{% url 'product_app:add_product' %}" class="btn btn-primary btn-sm rounded">New product</a>
+        </div>
+      </div>
+      <div class="card mb-4">
+        <header class="card-header">
+          <div class="row">
+            <div class="col-lg-6 col-md-6 me-auto">
+              <form class="d-flex" action="{% url "product_app:search" %}" method="GET">
+                {% csrf_token %}
+                <input name="search" class="bg-dark text-light rounded w-100" type="text" placeholder="Search..." class="form-control" />
+                <button type="submit" class="btn btn-secondary ms-2">Search</button>
+              </form>
+            </div>
+          </div>
+        </header> <!-- card-header end// -->
+        <div class="card-body">
+          {% for product in products %}
+            <article class="itemlist">
+              <div class="row align-items-center">
+                <div class="col-lg-2 col-sm-2 col-4 flex-grow-1">
+                  <a class="itemside" href="{% url 'product_app:variant' slug=product.product_slug %}">
+                    {% comment %} <div class="left">
+                      <img class="img-sm img-thumbnail" src="{% static 'user_assets/imgs/items/1.jpg' %}" alt="Item" />
+                    </div> {% endcomment %}
+                    <div class="info">
+                      <h6 class="mb-0">{{ product.product_name }}</h6>
+                    </div>
+                  </a>
+                </div>
+                <div class="col-lg-1 col-sm-2 col-4 col-price">
+                  <span>{{ product.product_brand }}</span>
+                </div>
+                <div class="col-lg-2 col-sm-2 col-4 col-price">
+                  <span>{{ product.category_id }}</span>
+                </div>
+                <div class="col-lg-2 col-sm-1 col-2 col-status">
+                  <form action="{% url 'product_app:product_status' slug=product.product_slug %}" method="POST">
+                    {% csrf_token %}
+                    <button type="submit" class="badge rounded-pill alert-success">
+                      {% if product.is_active %}
+                        Active
+                      {% else %}
+                        Inactive
+                      {% endif %}
+                    </button>
+                  </form>
+                </div>
+                <div class="col-lg-2 col-sm-2 col-4 col-date">
+                  <span>{{ product.created_at }}</span>
+                </div>
+                <div class="col-lg-2 col-sm-2 col-4 col-action text-end">
+                  <a href="{% url 'product_app:product_edit' id=product.id %}" class="btn btn-sm font-sm rounded btn-brand"><i class="material-icons md-edit"></i> Edit</a>
+                  <a href="{% url 'product_app:delete_product' slug=product.product_slug %}" class="delete-variant-btn btn btn-sm font-sm btn-light rounded" data-category-name="{{ product.product_name }}"><i class="material-icons md-delete_forever"></i> Delete</a>
+                </div>
+              </div>
+            </article> 
+          {% endfor %}
+        </div> 
+      </div>
+      <div class="pagination-area mt-30 mb-50">
+        <nav aria-label="Page navigation example">
+          <ul class="pagination justify-content-start">
+            {% if products.has_previous %}
+              <li class="page-item">
+                  <a class="page-link" href="?{% if request.GET.search %}search={{request.GET.search}}&{% endif %}page=1">&laquo;</a>
+              </li>
+            {% endif %}
+            {% for page_num in products.paginator.page_range %}
+              <li class="page-item {% if page_num == product.number %}active{% endif %}">
+                  <a class="page-link" href="?{% if request.GET.search %}search={{request.GET.search}}&{% endif %}page={{ page_num }}">{{ page_num }}</a>
+              </li>
+            {% endfor %}
+            {% if products.has_next %}
+              <li class="page-item">
+                  <a class="page-link" href="?{% if request.GET.search %}search={{request.GET.search}}&{% endif %}page={{ products.paginator.num_pages }}">&raquo;</a>
+              </li>
+            {% endif %}
+          </ul>
+        </nav>
+      </div>
+    </section>
+  </main>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      document.querySelectorAll('.delete-variant-btn').forEach(function (btn) {
+        btn.addEventListener('click', function (event) {
+          event.preventDefault()
+    
+          const deleteUrl = event.currentTarget.getAttribute('href')
+          const categoryName = event.currentTarget.getAttribute('data-category-name')
+    
+          // Display SweetAlert confirmation dialog
+          Swal.fire({
+            title: 'Are you sure?',
+            text: `You want to delete ${categoryName}`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Delete'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              // If confirmed, proceed with the delete action
+              window.location.href = deleteUrl
+            }
+          })
+        })
+      })
+    })
+  </script>
+{% endblock %}

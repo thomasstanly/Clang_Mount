@@ -1,0 +1,108 @@
+﻿{% extends 'user/base.html' %}
+{% load static %}
+{% block title %}
+  Clang Mount
+{% endblock %}
+{% block content %}
+  <main class="main">
+    <section class="home-slider position-relative">
+      
+        <div class="single-hero-slider single-animation-wrap">
+          <div class="container-fliud">
+            <div id="carouselExampleDark" class="carousel carousel-dark slide">
+              <div class="carousel-inner">
+                <div class="carousel-item active" data-bs-interval="10000">
+                  <img src="{% static 'user_assets/imgs/slider/speaker-system.png' %}" class="align-center d-block w-100 " alt="..." />
+                  <div class="carousel-caption d-none d-md-block">
+                    <h4 class="animated text-light">Trade-in offer</h4>
+                    <h2 class="animated text-light">Supper value deals</h2>
+                    <h1 class="animated text-light">On all products</h1>
+                    <a class="animated btn btn-brush btn-brush-3 text-light" href="{% url 'shop_app:home' %}">Shop Now</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+    </section>
+    <section class="featured section-padding position-relative">
+      <div class="container-fluid">
+        <div class="row justify-content-center">
+          <h3 class="section-title mb-20"><span>Popular</span> Categories</h3>
+          {% for category in categories %}
+            <div class="col-lg-2 col-md-3 mb-md-3 mb-lg-0">
+              <a href="{% url "shop_app:search_category" id=category.id %}">
+                <div class="banner-features wow fadeIn animated hover-up">
+                  <img src="{{ category.category_img.url }}" alt="" />
+                  <h4 class="bg-1">{{ category.category_title }}</h4>
+                </div>
+              </a>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+    <section class="banners mt-15 mb-15">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-lg-4 col-md-6">
+            <div class="banner-img wow fadeIn animated">
+              <img src="{% static 'user_assets/imgs/banner/banner-1.webp' %}" alt="" />
+              <div class="banner-text">
+                <h4>Smart Offer<br /></h4>
+                <a href="{% url "shop_app:search_brand" id=jbl.id %}">Shop Now <i class="fi-rs-arrow-right"></i></a>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6">
+            <div class="banner-img wow fadeIn animated">
+              <img src="{% static 'user_assets/imgs/banner/banner-2.webp' %}" alt="" />
+              <div class="banner-text">
+                <h4>Great Summer <br />Collection</h4>
+                <a href="{% url "shop_app:search_brand" id=jbl.id %}">Shop Now <i class="fi-rs-arrow-right"></i></a>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 d-md-none d-lg-flex">
+            <div class="banner-img wow fadeIn animated mb-sm-0">
+              <img src="{% static 'user_assets/imgs/banner/banner-3.webp' %}" alt="" />
+              <div class="banner-text">
+                <h4>Shop Today’s <br />Deals & Offers</h4>
+                <a href="{% url "shop_app:search_brand" id=jbl.id %}">Shop Now <i class="fi-rs-arrow-right"></i></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="banner-2 section-padding pb-0">
+      <div class="container-fluid">
+        <div class="row banner-img wow fadeIn animated f-none">
+          <img src="{% static 'user_assets/imgs/banner/banner-4.png' %}" alt="" />
+          <div class="banner-text d-md-block d-none">
+            <h1 class="fw-600 mb-20">We're an Sony</h1>
+            <a href="{% url "shop_app:search_brand" id=sony.id %}" class="btn">Buy More <i class="fi-rs-arrow-right"></i></a>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="section-padding">
+      <div class="container-fluid">
+        <h3 class="section-title mt-30 mb-50 wow fadeIn animated"><span>Featured</span> Brands</h3>
+        <div class="carausel-6-columns-cover position-relative wow fadeIn animated">
+          <div class="slider-arrow slider-arrow-2 carausel-6-columns-arrow" id="carausel-6-columns-3-arrows"></div>
+          <div class="carausel-6-columns" id="carausel-6-columns-3">
+            {% for brand in Brands %}
+              <div class="brand-logo d-flex align-items-center justify-content-center">
+                <a href="{% url "shop_app:search_brand" id=brand.id %}">
+                  <img class="img-grey-hover" src="{{brand.brand_image.url}}" alt="brands_{{forloop.counter}}" />
+                </a>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+{% endblock %}

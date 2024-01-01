@@ -1,0 +1,363 @@
+﻿{% extends 'user/base.html' %}
+{% load static %}
+{% block title %}Acoount{% endblock %}
+{% block content %}
+  <main class="main">
+    <section class="pt-150 pb-150">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-10 m-auto">
+            <div class="row">
+              <div class="col-md-4">
+                <div class="dashboard-menu mb-15 d-flex align-items-center justify-content-start">
+                  <div class="w-25 d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    {% if image.profile_image %}
+                    <img class="rounded-circle p-2" src="{{ image.profile_image.url }}" alt="" />
+                    {% else %}
+                    <img class="rounded-circle p-2" src="{% static 'user_assets/imgs/page/images.png' %}" alt="" />
+                    {% endif %}
+                    
+                  </div>
+                  <div>
+                    <p class="ms-4 fs-5">{{ user.first_name|title }} {{ user.last_name|title }}</p>
+                  </div>
+                </div>
+                <!-- modal -->
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Profile Photo</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body d-flex">
+                        <div id="alert-box"></div>
+                        <div id="image-box"></div>
+                      </div>
+                      <div class="modal-footer">
+                        <form action="" id="image-form">
+                          {% csrf_token %}
+                          {{ form.profile_image }}
+                        </form>
+                        <button id="confirm-btn"  class="btn btn-primary">Save changes</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="dashboard-menu">
+                  <ul class="nav flex-column" role="tablist">
+                    <li class="nav-item">
+                      <a class="nav-link active" id="account-detail-tab" data-bs-toggle="tab" href="#account-detail" role="tab" aria-controls="account-detail" aria-selected="true"><i class="fi-rs-user mr-10"></i>Account details</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" id="address-tab" data-bs-toggle="tab" href="#address" role="tab" aria-controls="address" aria-selected="false"><i class="fi-rs-marker mr-10"></i>My Address</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" id="password-tab" data-bs-toggle="tab" href="#password" role="tab" aria-controls="password" aria-selected="false"><i class="fi-rs-marker mr-10"></i>Change password</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" id="wallet-tab" data-bs-toggle="tab" href="#wallet" role="tab" aria-controls="wallet" aria-selected="false"><i class="fa-solid fa-wallet mr-10"></i>Wallet</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" id="orders-tab" data-bs-toggle="tab" href="#orders" role="tab" aria-controls="orders" aria-selected="false"><i class="fi-rs-shopping-bag mr-10"></i>Orders</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link"  href="{% url 'user_app:user_logout' %}"><i class="fi-rs-sign-out mr-10"></i>Logout</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <div class="col-md-8">
+                <div class="tab-content dashboard-content">
+                  <div class="tab-pane fade active show" id="account-detail" role="tabpanel" aria-labelledby="account-detail-tab">
+                    <div class="card">
+                      <div class="card-header">
+                        <center>
+                          <h5>Account Details</h5>
+                        </center>
+                      </div>
+                      <div class="card-body">
+                        <form action="{% url 'account_app:account' %}" method="POST">
+                          {% csrf_token %}
+                          <div class="row">
+                            <div class="form-group col-md-6">
+                              <label>First Name</label>
+                              {{ profile_form.first_name }}
+                              {{ profile_form.first_name.error }}
+                            </div>
+                            <div class="form-group col-md-6">
+                              <label>Last Name</label>
+                              {{ profile_form.last_name }}
+                              {{ profile_form.last_name.error }}
+                            </div>
+                            <div class="form-group col-md-12">
+                              <label>Date of Birth</label>
+                              {{ profile_form.date_of_birth }}
+                              {{ profile_form.date_of_birth.error }}
+                            </div>
+                            <div class="form-group col-md-12">
+                              <label>Email Address</label>
+                              <input class="form-control square" name="email" type="email" value="{{ user.email }}" readonly />
+                            </div>
+                            <div class="form-group col-md-12">
+                              <label>Phone</label>
+                              {{ profile_form.phone }}
+                              {{ profile_form.phone.error }}
+                            </div>
+                            {% if profile_form.errors %}
+                              <div class="alert alert-danger" role="alert">
+                                <strong>Error:</strong> {{ profile_form.errors }}
+                              </div>
+                            {% endif %}
+                            <div class="col-md-12">
+                              <button type="submit" class="btn btn-fill-out submit" name="submit" value="Submit">Save</button>
+                            </div>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="tab-pane fade" id="address" role="tabpanel" aria-labelledby="address-tab">
+                    <div class="card">
+                      <div class="card-header">
+                        <center>
+                          <h5>Manage Addresses</h5>
+                        </center>
+                      </div>
+                      <div class="accordion accordion-flush px-3 py-4" id="accordionFlushExample">
+                        <div class="accordion-item">
+                          <h2 class="accordion-header bg-body-secondary"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">ADD A NEW ADDRESS</button></h2>
+                          <div id="flush-collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                            <div class="accordion-body">
+                              <form action="{% url 'account_app:address' id=user.id %}" method="POST">
+                                {% csrf_token %}
+                                <div class="row">
+                                  <div class="form-group col-md-6">
+                                    <label>Address Type</label>
+                                    {{ address_form.address_type }}
+                                  </div>
+                                  <div class="form-group col-md-6">
+                                    <label>Phone number</label>
+                                    {{ address_form.phone }}
+                                  </div>
+                                  <div class="form-group col-md-12">
+                                    <label>Address</label>
+                                    {{ address_form.address }}
+                                  </div>
+                                  <div class="form-group col-md-3">
+                                    <label>Country</label>
+                                    {{ address_form.country }}
+                                    {{ address_form.country.error }}
+                                  </div>
+                                  <div class="form-group col-md-3">
+                                    <label>State/Region</label>
+                                    {{ address_form.state }}
+                                    {{ address_form.state.error }}
+                                  </div>
+                                  <div class="form-group col-md-3">
+                                    <label>City</label>
+                                    {{ address_form.city }}
+                                    {{ address_form.city.error }}
+                                  </div>
+                                  <div class="form-group col-md-3">
+                                    <label>Pin Code</label>
+                                    {{ address_form.pin_code }}
+                                    {{ address_form.pin_code.error }}
+                                  </div>
+                                  {% if address_form.errors %}
+                                    <div class="alert alert-danger" role="alert">
+                                      <strong>Error:</strong> {{ address_form.errors }}
+                                    </div>
+                                  {% endif %}
+                                  <div class="col-md-12">
+                                    <button type="submit" class="btn btn-fill-out submit" name="submit" value="Submit">Save</button>
+                                  </div>
+                                </div>
+                              </form>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="accordion accordion-flush px-3 py-5" id="accordionExample">
+                        {% for address in addresses %}
+                          <div class="accordion-item">
+                            <h2 class="accordion-header bg-light-subtle"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse{{ address.id }}" aria-expanded="true" aria-controls="flush-collapse{{ address.id }}">{{ address.address_type|upper }}</button></h2>
+                            <div id="flush-collapse{{ address.id }}" class="accordion-collapse collapse" data-bs-parent="##accordionFlushExample">
+                              <div class="row align-items-center">
+                                <div class="accordion-body col-md-8">
+                                  {{ address.address }} <br />
+                                  {{ address.phone }}
+                                  {{ address.city }}
+                                  {{ address.pin_code }} <br />
+                                  {{ address.state }}
+                                  {{ address.country }}
+                                </div>
+                                <div class="col-md-4 mx-auto">
+                                  <a href="{% url 'account_app:delete_address' id=address.id %}" class="text-dark delete-address-btn" data-address="{{ address.address_type }}"><i class="fas fa-trash fa-lg"></i></a>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        {% endfor %}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="tab-pane fade" id="password" role="tabpanel" aria-labelledby="account-detail-tab">
+                    <div class="card">
+                      <div class="card-header">
+                        <center>
+                          <h5>Change password</h5>
+                        </center>
+                      </div>
+                      <div class="card-body">
+                        <form action="{% url 'account_app:change_password' %}" method="post">
+                          {% csrf_token %}
+                          <div class="row">
+                            <div class="form-group col-md-12">
+                              <label>Current Password <span class="required">*</span></label>
+                              {{ password_form.old_password }}
+                              {{ password_form.old_password.error }}
+                            </div>
+                            <div class="form-group col-md-12">
+                              <label>New Password <span class="required">*</span></label>
+                              {{ password_form.new_password1 }}
+                              {{ password_form.new_password1.error }}
+                            </div>
+                            <div class="form-group col-md-12">
+                              <label>Confirm Password <span class="required">*</span></label>
+                              {{ password_form.new_password2 }}
+                              {{ password_form.new_password2.error }}
+                            </div>
+                            <div class="col-md-12">
+                              <button type="submit" class="btn btn-fill-out submit" name="submit" value="Submit">Save</button>
+                            </div>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="tab-pane fade" id="orders" role="tabpanel" aria-labelledby="orders-tab">
+                    <div class="card">
+                      <div class="card-header">
+                        <h5 class="mb-0"><center>Your Orders</center></h5>
+                      </div>
+                      <div class="card-body">
+                        {% if orders %}
+                          <div class="table-responsive">
+                            <table class="table">
+                              <thead>
+                                <tr>
+                                  <th>Order</th>
+                                  <th>Order Placed</th>
+                                  <th>Delivery Date</th>
+                                  <th>Total</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {% for order in orders %}
+                                  <tr>
+                                    <td>{{ order.order_no }}</td>
+                                    <td>{{ order.created_at | date:"F j, Y"}}</td>
+                                    <td>{{ order.delivery_date | date:"F j, Y"}}</td>
+                                    <td>₹ {{ order.total }}</td>
+                                    <td>
+                                      <a href="{% url 'account_app:order_details' id=order.id %}" class="btn-small d-block">View</a>
+                                    </td>
+                                    <td>
+                                      <a target="_blank" href="{% url "order_app:generate_invoice" id=order.id %}">invoice</a>
+                                    </td>
+                                    {% comment %} <td>
+                                      {% if order.status != 'CANCELLED' and order.status != 'DELIVERED' and order.status != 'OUT FOR DELIVERY' %}
+                                        <a class="p-1" href="{% url 'account_app:cancel_order' id=order.id %}" class="text-dark"><button class="btn-primary border-0 rounded-3">cancel</button></a>
+                                      {% else %}
+                                        <a id="disable_cancel{{ order.order_no }}" class="p-1" href="{% url 'account_app:cancel_order' id=order.id %}" class="text-dark"><button class="btn-secondary border-0 rounded-3">cancel</button></a>
+                                        <script>
+                                          // Disable the link using JavaScript
+                                          document.getElementById('disable_cancel{{ order.order_no}}').style.pointerEvents = 'none'
+                                        </script>
+                                      {% endif %}
+                                    </td> {% endcomment %}
+                                  </tr>
+                                {% endfor %}
+                              </tbody>
+                            </table>
+                          </div>
+                        {% else %}
+                          <center>
+                            <p>No order history</p>
+                          </center>
+                        {% endif %}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="tab-pane fade" id="wallet" role="tabpanel" aria-labelledby="wallet-tab">
+                    <div class="card">
+                      <div class="card-header">
+                        <h5 class="mb-0"><center>Wallet</center></h5>
+                      </div>
+                      <div class="card-body">
+                        <table class="table table-striped-columns">
+                          <thead>
+                            <tr>
+                              <th>date</th>
+                              <th>transaction type</th>
+                              <th>Amount</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {% for wallet in wallets %}
+                            <tr>
+                              <td>
+                                {{wallet.created_at}}
+                              </td>
+                              <td>
+                                {{wallet.type}}
+                              </td>
+                              <td>
+                               ₹ {{wallet.amount}}
+                              </td>
+                            </tr>
+                            {% endfor %}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      document.querySelectorAll('.delete-address-btn').forEach(function (btn) {
+        btn.addEventListener('click', function (event) {
+          event.preventDefault()
+    
+          const deleteUrl = event.currentTarget.getAttribute('href')
+          const categoryName = event.currentTarget.getAttribute('data-address')
+    
+          // Display SweetAlert confirmation dialog
+          Swal.fire({
+            title: 'Are you sure?',
+            text: `You want to delete ${categoryName}!`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Delete'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              // If confirmed, proceed with the delete action
+              window.location.href = deleteUrl
+            }
+          })
+        })
+      })
+    })
+  </script>
+{% endblock %}

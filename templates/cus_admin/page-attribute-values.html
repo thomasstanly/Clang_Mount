@@ -1,0 +1,65 @@
+{% extends 'cus_admin/base.html' %}
+{% load static %}
+{% block title %}Attribute Values{% endblock %}
+{% block content %}
+  <main class="main-wrap">
+    {% include 'cus_admin/header.html' %}
+    <section class="content-main">
+      <div class="row">
+        <div class="col-6">
+          <h2 class="content-title card-title">Attribute Value List</h2>
+          {% for message in messages %}
+            <div id="client-home" class="alert alert-{{ message.tags }} alert-dismissible fade show col-xl-5 col-lg-6 col-md-7 col-10 mx-auto" role="alert" style="width: 20vw;margin: 0px;">
+              <strong>{{ message }}</strong>
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="row justify-content-between">
+        <div class="card col-6 pt-15">
+          <form action="{% url 'product_app:add_attribute_value' %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{attr_form.as_p}}
+            <button type="submit" class="btn btn-primary my-3">add</button>
+          </form>
+        </div>
+        <div class="card col-4">
+          <div class="table-responsive">
+            <table class="table mt-10">
+              <tr class="from-control table-primary rounded ">
+                <th class="text-center">Attribute</th>
+                <th class="text-center">Value</th>
+                <th class="text-center">Status</th>
+              </tr>
+              {% for attribute in attr %}
+                <tr class="itemlist">
+                  <td class="text-center"><a href="#">{{ attribute.attribute_id }}</a></td>
+                  <td class="text-center"><a href="#">{{ attribute.attribute_value }}</a></td>
+                  <td class="text-center">
+                    <form action="{% url "product_app:attribute_value_status" id=attribute.id %}" method="POST">
+                      {% csrf_token %}
+                      <button type="submit" class="badge rounded-pill alert-danger border-none">{% if attribute.attr_is_active %}Active {% else %}Inactive{% endif %}</button>
+                    </form>
+                  </td>
+                </tr>
+              {% endfor %}                         
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+    <footer class="main-footer font-xs">
+      <div class="row pb-30 pt-15">
+        <div class="col-sm-6">
+          <script>
+            document.write(new Date().getFullYear())
+          </script>©, Evara - HTML Ecommerce Template .
+        </div>
+        <div class="col-sm-6">
+          <div class="text-sm-end">All rights reserved</div>
+        </div>
+      </div>
+    </footer>
+  </main>
+{% endblock %}

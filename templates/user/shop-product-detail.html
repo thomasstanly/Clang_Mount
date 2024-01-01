@@ -1,0 +1,132 @@
+﻿{% extends 'user/base.html' %}
+{% load static %}
+{% block title %}
+{{ product.product_name }}
+{% endblock %}
+{% block content %}
+  <main class="main">
+    <section class="mt-50 mb-50">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-lg-9">
+            <div class="product-detail accordion-detail">
+              <div class="row mb-50 justify-content-between">
+                <div class="col-md-6 col-sm-12 col-xs-12">
+                  <div class="detail-gallery">
+                    <span class="zoom-icon"><i class="fi-rs-search"></i></span>
+                    <!-- MAIN SLIDES -->
+                    <div class="product-image-slider">
+                      <figure class="border-radius-10">
+                        <img class="img-fluid" src="{{ product.thumbnail_image.url }}" alt="product image" />
+                      </figure>
+                      {% for img in images %}
+                        <figure class="border-radius-10">
+                          <img class="img-fluid" src="{{ img.image.url }}" alt="product image" />
+                        </figure>
+                      {% endfor %}
+                    </div>
+                    <!-- THUMBNAILS -->
+                    <div class="slider-nav-thumbnails pl-15 pr-15">
+                      <div>
+                        <img src="{{ product.thumbnail_image.url }}" alt="product image" />
+                      </div>
+                      {% for img in images %}
+                        <div>
+                          <img src="{{ img.image.url }}" alt="product image" />
+                        </div>
+                      {% endfor %}
+                    </div>
+                  </div>
+                  <!-- End Gallery -->
+                </div>
+                <div class="col-md-6 col-sm-12 col-xs-12">
+                  <div class="detail-info">
+                    <h2 class="title-detail">{{ product.product_name }}</h2>
+                    <div class="product-detail-rating">
+                      <div class="pro-details-brand">
+                        <span>Brands: {{ product.product_name.product_brand }}</span>
+                      </div>
+                    </div>
+                    <div class="clearfix product-price-cover">
+                      <div class="product-price primary-color float-left">
+                        <ins>
+                          <span class="text-brand">₹{{ product.after_discount }}</span>
+                        </ins>
+                        <ins>
+                          <span class="old-price font-md ml-15">₹{{ product.price }}</span>
+                        </ins>
+                        <ins>
+                          <span class="font-md ml-15">{{ product.percetage }}%</span>
+                        </ins>
+                      </div>
+                    </div>
+                    <div class="bt-1 border-color-1 mt-15 mb-15"></div>
+                    <div class="short-desc mb-30">
+                      <p>{{ product.description }}</p>
+                    </div>
+                    <div class="product_sort_info font-xs mb-30">
+                      <ul>
+                        <li class="mb-10">
+                          <i class="fi-rs-refresh mr-5"></i> 3 Day Return Policy
+                        </li>
+                        <li>
+                          <i class="fi-rs-credit-card mr-5"></i> Cash on Delivery available
+                        </li>
+                      </ul>
+                    </div>
+                    <div class="bt-1 border-color-1 mt-30 mb-30"></div>
+                    <div class="detail-extralink">
+                      <div class="product-extra-link2 d-flex">
+                        <a aria-label="Buy now" class="action-btn w-50 bg-dark text-light" href="{% url 'cart_app:add_to_cart' slug=product.varient_slug %}"><i class="fi-rs-shopping-bag-add"></i>Add to Cart</a>
+                        <a aria-label="Add To Wishlist" class="action-btn hover-up wish" data-item="{{ product.varient_slug }}" href="#"><i class="fi-rs-heart"></i></a>
+                      </div>
+                    </div>
+                    <ul class="product-meta font-xs color-grey mt-50">
+                      <li class="mb-5">
+                        SKU: <a href="#">{{ product.sku_id }}</a>
+                      </li>
+                      <li>
+                        Availability:<span class="in-stock text-success ml-5">{{ product.stock }} Items In Stock</span>
+                      </li>
+                    </ul>
+                  </div>
+                  <!-- Detail Info -->
+                </div>
+              </div>
+              <div class="tab-style3">
+                <ul class="nav nav-tabs text-uppercase">
+                  <li class="nav-item">
+                    <a class="nav-link active" id="Description-tab" data-bs-toggle="tab" href="#Description">Description</a>
+                  </li>
+                </ul>
+                <div class="tab-content shop_info_tab entry-main-content">
+                  <div class="tab-pane fade show active" id="Description">
+                    <div class="">
+                      <p>{{ product.description }}</p>
+                      <ul class="product-more-infor mt-30">
+                        {% for attribute_value in product.attribute_name.all %}
+                          <li class="mb-10">
+                            <span>{{ attribute_value.attribute_id.atrribute_name }}:</span> {{ attribute_value.attribute_value }}
+                          </li>
+                        {% endfor %}
+                      </ul>
+          
+                      <h4 class="mt-30">Packaging & Delivery</h4>
+                      <hr class="wp-block-separator is-style-wide" />
+                      <p>Packaging involves the design, creation, and assembly of materials used to protect, contain, and present products. The primary goals of packaging are to ensure the safety and integrity of the products during transit, provide information to consumers, and enhance the overall brand experience. Effective packaging also considers environmental sustainability and regulatory compliance.</p>
+                      <p>Efficient delivery systems are essential for meeting customer expectations regarding shipping times, reliability, and cost-effectiveness. In the modern era, e-commerce has significantly impacted delivery methods, with many businesses offering various shipping options, tracking services, and expedited delivery to meet the demands of online consumers.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <script>
+    const csrfToken = '{{ csrf_token }}'
+    const updateCartUrl = '{% url "cart_app:add_wishlist" %}'
+  </script>
+{% endblock %}

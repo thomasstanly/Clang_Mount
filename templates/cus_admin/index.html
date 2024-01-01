@@ -1,0 +1,235 @@
+{% extends 'cus_admin/base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% load static %}
+{% block content %}
+  <main class="main-wrap">
+    {% include 'cus_admin/header.html' %}
+    <section class="content-main">
+      <div class="content-header">
+        <div>
+          <h2 class="content-title card-title">Dashboard</h2>
+          <p>Whole data about your business here</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-3">
+          <div class="card card-body mb-4">
+            <article class="icontext">
+              <span class="icon icon-sm rounded-circle bg-primary-light"><i class="text-primary material-icons md-monetization_on"></i></span>
+              <div class="text">
+                <h6 class="mb-1 card-title">Revenue</h6>
+                <span class="fs-6">₹ {{ revenue }}</span>
+              </div>
+            </article>
+          </div>
+        </div>
+        <div class="col-lg-3">
+          <div class="card card-body mb-4">
+            <article class="icontext">
+              <span class="icon icon-sm rounded-circle bg-success-light"><i class="text-success material-icons md-local_shipping"></i></span>
+              <div class="text">
+                <h6 class="mb-1 card-title">Orders placed</h6> <span class="fs-6">{{ orders_count }}</span>
+              </div>
+            </article>
+          </div>
+        </div>
+        <div class="col-lg-3">
+          <div class="card card-body mb-4">
+            <article class="icontext">
+              <span class="icon icon-sm rounded-circle bg-warning-light"><i class="text-warning material-icons md-qr_code"></i></span>
+              <div class="text">
+                <h6 class="mb-1 card-title">Products Sold</h6> <span class="fs-6">{{ product_count }}</span>
+              </div>
+            </article>
+          </div>
+        </div>
+        <div class="col-lg-3">
+          <div class="card card-body mb-4">
+            <article class="icontext">
+              <span class="icon icon-sm rounded-circle bg-info-light"><i class="text-info material-icons md-shopping_basket"></i></span>
+              <div class="text">
+                <h6 class="mb-1 card-title">Monthly Earning</h6> <span class="fs-6">₹ {{ monthly_sales }}</span>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xl-9 col-lg-12">
+          <div class="card mb-4">
+            <article class="card-body">
+              <h5 class="card-title">Sale statistics</h5>
+              <input type="hidden" value="{{ monthly_sales_data }}" id="monthlySalesArray" />
+              <input type="hidden" value="{{ weekly_sales_data }}" id="dailyOrderArray" />
+              <input type="hidden" value="{{ yearly_sales_data }}" id="yearlyOrderCounts" />
+
+              <button class="btn btn-xs btn btn-sm btn-light font-xs rounded" onclick="displayChart('Weekly', this)">Weekly</button>
+              <button class="btn btn-sm btn-light font-xs rounded" onclick="displayChart('Monthly', this)">Monthly</button>
+              <button class="btn btn-sm btn-light font-xs rounded" onclick="displayChart('Yearly', this)">Yearly</button>
+              <canvas id="myChartWeekly" height="120px"></canvas>
+              <canvas id="myChartMonthly" height="120px" style="display: none;"></canvas>
+              <canvas id="myChartYearly" height="120px" style="display: none;"></canvas>
+            </article>
+          </div>
+        </div>
+        <div class="col-xl-3 col-lg-12">
+          <div class="card card-body mb-4">
+            <article class="icontext">
+              <span class="icon icon-sm rounded-circle bg-info-light"><i class="text-info material-icons md-shopping_basket"></i></span>
+              <div class="text">
+                <h6 class="mb-1 card-title">Yearly Earning</h6> <span class="fs-6">₹ {{ yearly_sales }}</span>
+              </div>
+            </article>
+          </div>
+          <div class="card card-body mb-4">
+            <article class="icontext">
+              <span class="icon icon-sm rounded-circle bg-info-light"><i class="text-info material-icons md-shopping_basket"></i></span>
+              <div class="text">
+                <h6 class="mb-1 card-title">Total Customer</h6> <span class="fs-6">{{ user }}</span>
+              </div>
+            </article>
+          </div>
+          <div class="card mb-4">
+            <article class="card-body">
+              <h5 class="card-title">New Members</h5>
+              <div class="new-member-list">
+                {% if new_members %}
+                  {% for user in new_members %}
+                    <div class="d-flex align-items-center justify-content-between mb-4">
+                      <div class="d-flex align-items-center">
+                        <div>
+                          <h6>{{ user.First_name }} {{ user.last_name }}</h6>
+                          <p class="text-muted font-xs">{{ user.email }}</p>
+                        </div>
+                      </div>
+                      {% comment %} <a href="#" class="btn btn-xs"><i class="material-icons md-add"></i> Add</a> {% endcomment %}
+                    </div>
+                  {% endfor %}
+                {% else %}
+                  <div class="d-flex align-items-center justify-content-between mb-4">
+                    <div class="d-flex align-items-center">
+                      <div>
+                        <h6>No new members</h6>
+                      </div>
+                    </div>
+                    {% comment %} <a href="#" class="btn btn-xs"><i class="material-icons md-add"></i> Add</a> {% endcomment %}
+                  </div>
+                {% endif %}
+              </div>
+            </article>
+          </div>
+          <div class="card mb-4">
+            <article class="card-body">
+              <h5 class="card-title">Last login in past 10 days</h5>
+              {% for user in last_logins %}
+                <div class="new-member-list">
+                  <div class="d-flex align-items-center justify-content-between mb-4">
+                    <div class="d-flex align-items-center">
+                      <div>
+                        <h6>{{ user.user_name }}</h6>
+                        <p class="font-xs">{{ user.email }}</p>
+                      </div>
+                    </div>
+                    {% comment %} <a href="#" class="btn btn-xs"><i class="material-icons md-add"></i> Add</a> {% endcomment %}
+                  </div>
+                </div>
+              {% endfor %}
+            </article>
+          </div>
+        </div>
+      </div>
+      <div class="card mb-4">
+        <header class="card-header">
+          <div class="row">
+            <div class="col-lg-6 col-md-6 me-auto">
+              <h2 class="content-title card-title">Latest orders</h2>
+            </div>
+          </div>
+        </header> <!-- card-header end// -->
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>#ID</th>
+                  <th scope="col">Name</th>
+                  <th scope="col">Email</th>
+                  <th scope="col">Total</th>
+                  <th scope="col">Payment Status</th>
+                  <th scope="col">Date</th>
+                  <th scope="col" class="text-end">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for order in orders %}
+                  <tr>
+                    <td>{{ order.order_no }}</td>
+                    <td>
+                      <b>{{ order.user.first_name }} {{ order.user.last_name }}</b>
+                    </td>
+                    <td>{{ order.user }}</td>
+                    <td>{{ order.grand_total }}</td>
+                    <td>
+                      <span class="badge rounded-pill alert-warning">{{ order.payment.status }}</span>
+                    </td>
+                    <td>{{ order.created_at }}</td>
+                    <td class="text-end">
+                      <a href="{% url 'admin_app:order_details' id=order.id %}" class="btn btn-md rounded font-sm">Detail</a>
+                    </td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div> 
+        </div> 
+      </div> 
+    </section> 
+    <footer class="main-footer font-xs">
+      <div class="row pb-30 pt-15">
+        <div class="col-sm-6">
+          <script>
+            document.write(new Date().getFullYear())
+          </script>©, CLANG MOUNT - Ecommerce .
+        </div>
+        <div class="col-sm-6">
+          <div class="text-sm-end">All rights reserved</div>
+        </div>
+      </div>
+    </footer>
+  </main>
+  <script>
+    // Functions to display respective charts
+    function displayChart(chartType, button) {
+      highlightButton(button)
+    
+      if (chartType === 'Weekly') {
+        showChart('myChartWeekly')
+        hideChart('myChartMonthly')
+        hideChart('myChartYearly')
+      } else if (chartType === 'Monthly') {
+        hideChart('myChartWeekly')
+        showChart('myChartMonthly')
+        hideChart('myChartYearly')
+      } else if (chartType === 'Yearly') {
+        hideChart('myChartWeekly')
+        hideChart('myChartMonthly')
+        showChart('myChartYearly')
+      }
+    }
+    
+    function showChart(chartId) {
+      document.getElementById(chartId).style.display = 'block'
+    }
+    
+    function hideChart(chartId) {
+      document.getElementById(chartId).style.display = 'none'
+    }
+    
+    function highlightButton(button) {
+      const buttons = document.querySelectorAll('.btn')
+      buttons.forEach((btn) => btn.classList.remove('btn-xs'))
+    
+      button.classList.add('btn-xs')
+    }
+  </script>
+{% endblock %}
