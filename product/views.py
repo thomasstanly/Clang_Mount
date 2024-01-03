@@ -209,7 +209,7 @@ def add_product(request):
                 messages.success(request,"Product is added ")
                 return redirect('product_app:product')
             else:
-                messages.success(request,"Product is not added ")
+                messages.warning(request,"Product is not added ")
                 return redirect('product_app:product')         
         context = {
             'form' : form
@@ -294,8 +294,8 @@ def variant_add(request,slug):
                 multi_image = request.FILES.getlist('multiple_image')
                 print(multi_image)
                 for image in multi_image:
-                    product_image.objects.create(varient_id=variant,image=image)
-                    product_image.save()
+                    variant_image=product_image.objects.create(varient_id=variant,image=image)
+                    variant_image.save()
                 messages.success(request,"variant Added")
                 return redirect('product_app:variant',slug)
 
