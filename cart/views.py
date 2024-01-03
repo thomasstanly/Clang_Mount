@@ -43,7 +43,7 @@ def cart_list(request):
         products = Product_varient.objects.select_related('product_name').filter(varient_slug__in=variant_slug)
         
         sub_total = sum(product.price * cart_dict[product.varient_slug] for product in products)
-        dis_total = sum((product.price*product.percetange())/100 * cart_dict[product.varient_slug]  for product in products)
+        dis_total = sum((product.price*product.percetage())/100 * cart_dict[product.varient_slug]  for product in products)
         total = sub_total-dis_total 
         context = {
             'items' : [{'product': product, 'quantity':cart_dict[product.varient_slug]} for product in products],
