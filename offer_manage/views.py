@@ -63,7 +63,7 @@ class Brand_Offer(ListView,FormView):
 
     def get_context_data(self,**kwargs):
         context = super().get_context_data(**kwargs)
-        context["brandoffers"] = BrandOffer.objects.filter(is_active=True)
+        context["brandoffers"] = BrandOffer.objects.all()
         return context
     
 class Brand_Offer_Create(CreateView):
@@ -90,7 +90,7 @@ class Brand_Offer_Update(UpdateView):
     def get_context_data(self,**kwargs):
         context = super().get_context_data(**kwargs)
         context['brand_offer_id'] = self.kwargs['pk']
-        context["brandoffers"] = BrandOffer.objects.filter(is_active=True)
+        context["brandoffers"] = BrandOffer.objects.all()
         return context
 
 class Brand_Offer_Delete(DeleteView):
@@ -103,7 +103,7 @@ class Brand_Offer_Delete(DeleteView):
 
 def category_status(request,id):
     if request.method == 'POST':
-        status = CategoryOffer.objects.get(id =id)
+        status = CategoryOffer.objects.get(id=id)
         if status.is_active:
             status.is_active = False
             status.save()
@@ -114,7 +114,7 @@ def category_status(request,id):
     
 def brand_status(request,id):
     if request.method == 'POST':
-        status = Brand_Offer.objects.get(id =id)
+        status = BrandOffer.objects.get(id =id)
         if status.is_active:
             status.is_active = False
             status.save()

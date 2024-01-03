@@ -43,8 +43,7 @@ $(document).on('click','.update-cart',function(e){
         
         $('.max-plus[data-item="' + pId + '"]').prop('disabled', qty >= maxStock);
         $('.max-minus[data-item="' + pId + '"]').prop('disabled', qty == minStock);
-        console.log(qty,minStock,maxStock)
-        console.log($('.max-plus[data-item="' + pId + '"]'));
+        
 
         updateTotal()
         $.ajax({

@@ -36,7 +36,8 @@
                       <tr>
                         <th scope="row">
                           <div class="d-flex align-items-center">
-                            <a href="{% url "shop_app:product_details" slug=item.product.varient_slug %}"><img src="{{ item.product.thumbnail_image.url }}" class="img-fluid rounded-3" style="width: 120px;" alt="Book" /></a>
+                            <a href="{% url "shop_app:product_details" slug=item.product.varient_slug %}">
+                              <img src="{{ item.product.thumbnail_image.url }}" class="img-fluid rounded-3" style="width: 120px;" alt="Book" /></a>
                             <div class="flex-column ms-4">
                               <p class="mb-2">{{ item.product.product_name }}</p>
                               <p class="mb-0">{{ item.product.product_name.product_brand }}</p>
@@ -134,12 +135,12 @@
                         </td>
                         <td class="align-middle text-center">
                           <div class="d-flex  border-dark-subtle rounded justify-content-between mx-auto w-75">
-                            <button class="btn btn- px-3 update-cart" data-item="{{ item.product.id }}" onclick="this.parentNode.querySelector('input[type=number]').stepDown()"><i class="fas fa-minus"></i></button>
+                            <button class="btn btn-link px-3 update-cart max-minus" data-item="{{ item.product.id }}" onclick="this.parentNode.querySelector('input[type=number]').stepDown()" type="button" {% if item.quantity == 1 %} disabled {% endif %}><i class="fas fa-minus"></i></button>
 
                             <span></span>
-                            <input class="form-control p-0  quantity-input quantity-input-{{ item.id }}" id="form1" min="1" name="quantity" max="{{ item.product.stock }}" value="{{ item.quantity }}" type="number" style="width: 40px;border: none;" />
+                            <input class="form-control p-0  quantity-input quantity-input-{{ item.product.id }}" id="form1" min="1" name="quantity" max="{{ item.product.stock }}" value="{{ item.quantity }}" type="number" style="width: 40px;border: none;" readonly/>
 
-                            <button class="btn px-3 update-cart bt" data-item="{{ item.product.id }}" onclick="this.parentNode.querySelector('input[type=number]').stepUp()"><i class="fas fa-plus"></i></button>
+                            <button class="btn btn-link px-3 update-cart bt max-plus" data-item="{{ item.product.id }}" onclick="this.parentNode.querySelector('input[type=number]').stepUp()" type="button"{% if item.quantity == item.product.stock %} disabled {% endif %}><i class="fas fa-plus" ></i></button>
                           </div>
                         </td>
                         <td class="align-middle text-center">

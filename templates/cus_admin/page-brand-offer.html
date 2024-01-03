@@ -58,7 +58,7 @@
                         <td>{{ brandoffer.discount_percentage }} %</td>
                         <td>{{ brandoffer.offer_expire_date }}</td>
                         <td>
-                          <form action="{% url "offer_app:category_status" id=brandoffer.id %}" method="POST">
+                          <form action="{% url "offer_app:brand_status" id=brandoffer.id %}" method="POST">
                             {% csrf_token %}
                             <button type="submit" class="badge rounded-pill alert-success border-0">
                               {% if brandoffer.is_active %}

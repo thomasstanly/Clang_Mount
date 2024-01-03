@@ -16,6 +16,8 @@ def car_fuc(request):
         elif 'cart' in request.session:
             for key,value in request.session['cart'].items():
                 count += value
+            if count == 0 :
+                del request.session['cart']
     except Cart.DoesNotExist:
         pass
 
