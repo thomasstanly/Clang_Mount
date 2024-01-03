@@ -8,11 +8,8 @@
             <li class="nav-item">
                 <a class="nav-link btn-icon darkmode" href="#"> <i class="material-icons md-nights_stay"></i> </a>
             </li>
-            <li class="dropdown nav-item">
-                <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount" aria-expanded="false"> <img class="img-xs rounded-circle" src="{% static 'admin_assets/imgs/people/avatar2.jpg'%}" alt="User"></a>
-                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
-                    <a class="dropdown-item text-danger" href="{% url "admin_app:admin_logout" %}"><i class="material-icons md-exit_to_app"></i>Logout</a>
-                </div>
+            <li class="nav-item">
+                <a href="{% url "admin_app:admin_logout" %}"><i class="material-icons md-exit_to_app"></i></a>
             </li>
         </ul>
     </div>
