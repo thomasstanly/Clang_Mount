@@ -16,7 +16,5 @@ class PriceRangeFilterForm(forms.Form):
                raise forms.ValidationError('Min Price must be less than or equal to Max Price')
             if min_price < 100:
                 raise forms.ValidationError("Min value is 100")
-        else:
-            raise forms.ValidationError("dasds")
 
         return cleaned_data
