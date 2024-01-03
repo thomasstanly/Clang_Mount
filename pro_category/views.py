@@ -18,8 +18,16 @@ def add_categories(request):
         if request.method == 'POST':
             category = request.POST['category']
             description = request.POST['description']
-            image = request.FILES['image']
+            print(category)
             try:
+                image = request.FILES['image']
+            except :
+                messages.warning(request,"add category image")
+                return redirect('category_app:add_categories')
+            try:
+                if category == '':
+                    messages.warning(request,"Add category title")
+                    return redirect('category_app:add_categories')
                 if Categories.objects.get(category_title=category):
                     messages.warning(request,"category is taken")
                     return redirect('category_app:add_categories')
