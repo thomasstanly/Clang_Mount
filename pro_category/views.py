@@ -18,7 +18,6 @@ def add_categories(request):
         if request.method == 'POST':
             category = request.POST['category']
             description = request.POST['description']
-            print(category)
             try:
                 image = request.FILES['image']
             except :
