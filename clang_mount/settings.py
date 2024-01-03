@@ -1,6 +1,7 @@
 
 import os
 from pathlib import Path
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -10,12 +11,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-92$ow+f^b^eu90+r_8q3mab06&6@&0e@7yfb#x1q(^^_jeg_a8'
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG')
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -84,9 +85,9 @@ WSGI_APPLICATION = 'clang_mount.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'clang_mount',
-        'USER': 'postgres',
-        'PASSWORD': '12345',
+        'NAME': config('NAME'),
+        'USER': config('USER'),
+        'PASSWORD': config('PASSWORD'),
         'PORT': '5432',
     }
 }
@@ -139,19 +140,19 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'admin_side.User'  # Point to your custom user model
 
 #email_host
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = "smtp.gmail.com"
-EMAIL_PORT = 587
-EMAIL_HOST_USER = "clangmount@gmail.com"
-EMAIL_HOST_PASSWORD = "ekhukgmmrpvhaken"
-EMAIL_USE_TLS = True
+EMAIL_BACKEND = config('EMAIL_BACKEND')
+EMAIL_HOST = config('EMAIL_HOST')
+EMAIL_PORT = config('EMAIL_PORT')
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+EMAIL_USE_TLS = config('EMAIL_USE_TLS')
 
 
 
 
 #RAZORPAY
-KEY = 'rzp_test_DadhvgCTL7p70u'
-SECRET_KEY = 'o7iNqzNVyDMRokNUTNazpAVS'
+KEY = config('KEY')
+SECRET_KEY = config('SECRET_KEY')
 
 
 #social
@@ -175,7 +176,5 @@ LOGIN_REDIRECT_URL = 'shop_app:index'
 LOGOUT_URL = 'user_app:user_logout'
 LOGOUT_REDIRECT_URL = 'user_app:user_login'
 
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = "52100197078-hltg3m213u5j8qk2l7sb424573nrjfj1.apps.googleusercontent.com"
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = "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"
-
-# image cropping
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = config('SOCIAL_AUTH_GOOGLE_OAUTH2_KEY')
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = config('SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET')

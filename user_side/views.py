@@ -84,8 +84,9 @@ def otp(request):
     password = request.session.get('password')
     if request.method == 'POST':
         if str(request.session['otp_key']) == str(request.POST['otp']):
-            customer = User.objects.create_user(user_name = user, email = email, password = password )
+            customer = User.objects.create_user(username = user, email = email, password = password )
             customer.save()
+            customer = authenticate(request, email=email, password=password)
             user_login(request,customer)
             return redirect('shop_app:index')
         else:
