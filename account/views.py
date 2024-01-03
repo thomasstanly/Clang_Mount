@@ -47,6 +47,12 @@ def account(request):
         except Profile_image.DoesNotExist:
             image = Profile_image(user=user)
             image.save()
+            
+        form = ProfileImage(request.POST or None,request.FILES or None,instance=image)
+        if 'additional_variable' in request.POST:
+            if form.is_valid():
+                form.save()
+                return JsonResponse({'message':'Profile Image Added'})
  
         if request.method == 'POST':
             profile_form = profileForm(request.POST,instance=user)
@@ -59,12 +65,6 @@ def account(request):
             else:
                 messages.error(request,'Profile is not updated')
                 return redirect('account_app:account')
-            
-        form = ProfileImage(request.POST or None,request.FILES or None,instance=image)
-        if form.is_valid():
-            form.save()
-            return JsonResponse({'message':'Profile Image Added'})
-        
         context = {
             'profile_form' : profile_form,
             'image':image,

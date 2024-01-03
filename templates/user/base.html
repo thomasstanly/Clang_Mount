@@ -353,9 +353,11 @@
 
         confirmBtn.addEventListener('click', ()=>{
           cropper.getCroppedCanvas().toBlob((blob) =>{
+            const additionalVar = 'some_value';
             const fd = new FormData()
             fd.append('csrfmiddlewaretoken',csrf[0].value)
             fd.append('profile_image',blob, 'my-image.jpg')
+            fd.append('additional_variable', additionalVar)
 
             $.ajax({
               type: 'POST',
