@@ -26,7 +26,6 @@ prompt-toolkit  ==       3.0.39
 psycopg        ==        3.1.12
 psycopg-binary    ==     3.1.12
 pure-eval        ==      0.2.2
-pycairo         ==       1.25.1
 pycparser        ==      2.21
 pydyf            ==      0.8.0
 pyHanko          ==      0.21.0

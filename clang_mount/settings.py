@@ -17,7 +17,7 @@ SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG')
 
 ALLOWED_HOSTS = ['*']
-
+ 
 
 # Application definition
 
@@ -112,7 +112,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-# Internationalization
+# Internationalization 
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
